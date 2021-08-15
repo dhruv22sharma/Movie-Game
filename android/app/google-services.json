@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "932331597550",
+    "project_id": "movie-game-a7f93",
+    "storage_bucket": "movie-game-a7f93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932331597550:android:8217cd93a49f2198b68dff",
+        "android_client_info": {
+          "package_name": "com.example.mpvie_game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932331597550-r22o12bouuenevpcc2odoapbpt8co3gn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiYcI6-bB3nm9i8W7yWuYScr-fqqnqPEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932331597550-r22o12bouuenevpcc2odoapbpt8co3gn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
