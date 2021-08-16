@@ -58,6 +58,9 @@ class _ListItemsState extends State<ListItems> {
 
   Widget _buildRow(item) {
     final alreadyWatched = myMovies.contains(item);
+    String s1 = item[0];
+    String s2 = item[1];
+    String s3 = item[3];
     return Card(
       elevation: 4,
       margin: EdgeInsets.all(5),
@@ -68,25 +71,85 @@ class _ListItemsState extends State<ListItems> {
             style: TextStyle(fontSize: 21.0),
           ),
           subtitle: Text(item[1]),
-          trailing: Icon(
-            alreadyWatched ? Icons.check : Icons.play_circle_outline,
-            color: alreadyWatched ? Colors.green[400] : null,
-          ),
+          trailing: IconButton(
+              onPressed: () => {
+                    setState(() {
+                      if (alreadyWatched) {
+                        int index = listMovies.indexOf(item);
+                        setState(() {
+                          listMovies[index][2] = '0';
+                          print(listMovies[index]);
+                          updatemyList(listMovies);
+                        });
+                        myMovies.remove(item);
+                      } else {
+                        int index = listMovies.indexOf(item);
+                        print(listMovies[index]);
+                        //print(x);
+                        setState(() {
+                          listMovies[index][2] = '1';
+                          print(listMovies[index]);
+                          updatemyList(listMovies);
+                        });
+                      }
+                    })
+                  },
+              icon: Icon(
+                alreadyWatched ? Icons.check : Icons.play_circle_outline,
+                color: alreadyWatched ? Colors.green[400] : null,
+              )),
           onTap: () {
-            setState(() {
-              if (alreadyWatched) {
-                myMovies.remove(item);
-              } else {
-                int index = listMovies.indexOf(item);
-                print(listMovies[index]);
-                //print(x);
-                setState(() {
-                  listMovies[index][2] = '1';
-                  print(listMovies[index][2]);
-                  updatemyList(listMovies);
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Edit Movie : $s1'),
+                    actions: <Widget>[
+                      TextField(
+                          onChanged: (value) {
+                            if(value!='')
+                            {s1 = value;}
+                          },
+                          decoration: InputDecoration(hintText: 'Movie Name')),
+                      TextField(
+                          onChanged: (value) {
+                            if(value!='')
+                            {s2 = value;}
+                          },
+                          decoration:
+                              InputDecoration(hintText: 'Director\'s Name')),
+                      TextField(
+                          onChanged: (value) {
+                            if(value!='')
+                            {
+                                s3 = value;
+                            }
+                            
+                          },
+                          decoration: InputDecoration(
+                              hintText:
+                                  'Poster URL(Note: The url should return .jpg file)')),
+                      FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              int index = listMovies.indexOf(item);
+                              listMovies[index][0] = s1;
+                              listMovies[index][1] = s2;
+                              listMovies[index][3] = s3;
+                              Navigator.of(context).pop();
+                            });
+                          },
+                          color: Colors.green[400],
+                          child: Text('Ok')),
+                      FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          color: Colors.red[300],
+                          child: Text('Cance'))
+                    ],
+                  );
                 });
-              }
-            });
           },
           leading: SizedBox(
               height: 100.0,
