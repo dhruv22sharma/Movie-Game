@@ -42,7 +42,7 @@ class __LoginformState extends State<_Loginform> {
   Widget build(BuildContext context) {
     return Center(
         child: Card(
-            elevation: 4,
+            
             margin: EdgeInsets.all(12),
             
             shape:

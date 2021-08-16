@@ -7,11 +7,46 @@ class ListItems extends StatefulWidget {
 
 class _ListItemsState extends State<ListItems> {
   final List listMovies = [
-    ['Harry Potter', 'David Yates'],
-    ['Orignal Sin', 'Michael Cristofer'],
-    ['The Noblemen', 'Vandana Kataria'],
+    [
+      'Harry Potter',
+      'David Yates',
+      '0',
+      'https://mypostercollection.com/wp-content/uploads/2018/09/Harry-Potter-Poster-2001-MyPosterCollection.com-1.jpg'
+    ],
+    [
+      'Orignal Sin',
+      'Michael Cristofer',
+      '0',
+      'https://mypostercollection.com/wp-content/uploads/2018/09/Harry-Potter-Poster-2001-MyPosterCollection.com-1.jpg'
+    ],
+    [
+      'The Noblemen',
+      'Vandana Kataria',
+      '0',
+      'https://mypostercollection.com/wp-content/uploads/2018/09/Harry-Potter-Poster-2001-MyPosterCollection.com-1.jpg'
+    ],
+    [
+      'abcd',
+      '123',
+      '0',
+      'https://mypostercollection.com/wp-content/uploads/2018/09/Harry-Potter-Poster-2001-MyPosterCollection.com-1.jpg'
+    ]
   ];
   final myMovies = Set();
+  void updatemyList(var list) {
+    list.forEach((element) {
+      if (element[2] == '1') {
+        setState(() {
+          myMovies.add(element);
+        });
+
+        print('updated');
+      } else if (element[2] == '0') {
+        myMovies.remove(element);
+      }
+    });
+  }
+
   Widget _buildList() {
     return ListView.builder(
         padding: const EdgeInsets.all(10.0),
@@ -21,50 +56,62 @@ class _ListItemsState extends State<ListItems> {
         });
   }
 
-  Widget _buildRow(pair) {
-    final alreadyWatched = myMovies.contains(pair);
+  Widget _buildRow(item) {
+    final alreadyWatched = myMovies.contains(item);
     return Card(
       elevation: 4,
       margin: EdgeInsets.all(5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: ListTile(
-        title: Text(
-          pair[0],
-          style: TextStyle(fontSize: 21.0),
-        ),
-        subtitle: Text(pair[1]),
-        trailing: Icon(
-          alreadyWatched ? Icons.check : Icons.play_circle_outline,
-          color: alreadyWatched ? Colors.green[400] : null,
-        ),
-        onTap: () {
-          setState(() {
-            if (alreadyWatched) {
-              myMovies.remove(pair);
-            } else {
-              myMovies.add(pair);
-            }
-          });
-        },
-      ),
+          title: Text(
+            item[0],
+            style: TextStyle(fontSize: 21.0),
+          ),
+          subtitle: Text(item[1]),
+          trailing: Icon(
+            alreadyWatched ? Icons.check : Icons.play_circle_outline,
+            color: alreadyWatched ? Colors.green[400] : null,
+          ),
+          onTap: () {
+            setState(() {
+              if (alreadyWatched) {
+                myMovies.remove(item);
+              } else {
+                int index = listMovies.indexOf(item);
+                print(listMovies[index]);
+                //print(x);
+                setState(() {
+                  listMovies[index][2] = '1';
+                  print(listMovies[index][2]);
+                  updatemyList(listMovies);
+                });
+              }
+            });
+          },
+          leading: SizedBox(
+              height: 100.0,
+              width: 100.0, // fixed width and height
+              child: Image.network(item[3]))),
     );
   }
 
   void _pushSaved() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (BuildContext context) {
-      final Iterable<ListTile> tiles = myMovies.map((pair) {
+      final Iterable<ListTile> tiles = myMovies.map((element) {
         return ListTile(
             title: Text(
-              pair[0],
+              element[0],
               style: TextStyle(fontSize: 21.0),
             ),
-            subtitle: Text(pair[1]),
+            subtitle: Text(element[1]),
             trailing: IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
                 setState(() {
-                  myMovies.remove(pair);
+                  int index = listMovies.indexOf(element);
+                  listMovies[index][2] = '0';
+                  updatemyList(listMovies);
                 });
               },
             ));
@@ -83,9 +130,10 @@ class _ListItemsState extends State<ListItems> {
   }
 
   Widget build(BuildContext context) {
-    final List<String> pair = [];
-    String s1='';
-    String s2='';
+    final List pair = [];
+    String s1 = '';
+    String s2 = '';
+    String s3 = '';
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -115,11 +163,20 @@ class _ListItemsState extends State<ListItems> {
                         },
                         decoration:
                             InputDecoration(hintText: 'Director\'s Name')),
+                    TextField(
+                        onChanged: (value) {
+                          s3 = value;
+                        },
+                        decoration: InputDecoration(
+                            hintText:
+                                'Poster URL(Note: The url should return .jpg file)')),
                     FlatButton(
                         onPressed: () {
                           setState(() {
                             pair.add(s1);
                             pair.add(s2);
+                            pair.add('0');
+                            pair.add(s3);
                             listMovies.add(pair);
                             Navigator.of(context).pop();
                           });
